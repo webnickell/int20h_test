@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
+import 'package:int20h_test/bloc/route_bloc/route_bloc.dart';
+import 'package:int20h_test/data/google_directions/google_directions.dart';
 import 'package:int20h_test/ui/pages/map_page.dart';
 
 import 'ui/pages/ar_page.dart';
 
 void main() {
-  runApp(MyApp());
+  DirectionsService.init('AIzaSyBHv9oUtC-pAi-tb1ftPLAal7VSDC9xHtI');
+  final directions = DirectionsService();
+
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (ctx) => PointsCubit()),
+        BlocProvider(
+          create: (ctx) => RouteBloc(
+            pointsCubit: ctx.read<PointsCubit>(),
+            directions: directions,
+          ),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

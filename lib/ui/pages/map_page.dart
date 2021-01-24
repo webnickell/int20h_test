@@ -1,7 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
+import 'package:int20h_test/bloc/points_bloc.dart/points_state.dart';
+import 'package:int20h_test/bloc/route_bloc/route_bloc.dart';
+import 'package:int20h_test/bloc/route_bloc/route_state.dart';
+import 'package:int20h_test/data/google_directions/google_directions.dart';
+import 'package:location/location.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key key}) : super(key: key);
@@ -18,15 +25,55 @@ class _MapPageState extends State<MapPage> {
     zoom: 14.4746,
   );
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  Future<LocationData> _getLocation() async {
+    final location = Location();
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    var _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    var _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+    return await location.getLocation();
+  }
+
+  Future<void> _onGetLocation() async {
+    final location = await _getLocation();
+    if (location == null) return;
+    context.read<PointsCubit>().setOrigin(
+          GeoCoord(
+            location.latitude,
+            location.longitude,
+          ),
+        );
+
+    final controller = await _controller.future;
+
+    controller.animateCamera(
+      CameraUpdate.newLatLng(LatLng(
+        location.latitude,
+        location.longitude,
+      )),
+    );
+  }
+
+  Future<void> _onMapTap(LatLng location) async {
+    context.read<PointsCubit>().setDestination(
+          GeoCoord(
+            location.latitude,
+            location.longitude,
+          ),
+        );
   }
 
   @override
@@ -35,17 +82,58 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: Text('Test task for INT20H'),
       ),
-      body: GoogleMap(
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
+      body: BlocBuilder<RouteBloc, RouteState>(
+        builder: (_, routeState) => BlocBuilder<PointsCubit, PointsState>(
+          builder: (_, points) => GoogleMap(
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            onTap: _onMapTap,
+            markers: points.destination != null
+                ? {
+                    Marker(
+                      markerId: MarkerId('destination'),
+                      position: LatLng(
+                        points.destination.latitude,
+                        points.destination.longitude,
+                      ),
+                    ),
+                  }
+                : null,
+            polylines: routeState is RouteData
+                ? {
+                    for (final r in routeState.routes)
+                      Polyline(
+                        polylineId: PolylineId('path'),
+                        points: r.overviewPath
+                            .map((p) => LatLng(
+                                  p.latitude,
+                                  p.longitude,
+                                ))
+                            .toList(),
+                      ),
+                  }
+                : null,
+            myLocationEnabled: true,
+          ),
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _goToTheLake,
-        child: Text('AR'),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton(
+              onPressed: _onGetLocation,
+              child: Icon(Icons.gps_fixed),
+            ),
+            FloatingActionButton(
+              onPressed: () {},
+              child: Text('AR'),
+            ),
+          ],
+        ),
       ),
     );
   }
