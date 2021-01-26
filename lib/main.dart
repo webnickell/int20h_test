@@ -4,7 +4,9 @@ import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
 import 'package:int20h_test/bloc/route_bloc/route_bloc.dart';
 import 'package:int20h_test/data/google_directions/google_directions.dart';
 import 'package:int20h_test/ui/pages/map_page.dart';
+import 'package:location/location.dart';
 
+import 'bloc/selected_route_bloc.dart/selected_route_cubit.dart';
 import 'ui/pages/ar_page.dart';
 
 void main() {
@@ -21,6 +23,9 @@ void main() {
             directions: directions,
           ),
         ),
+        BlocProvider(
+          create: (ctx) => SelectedRouteCubit(),
+        ),
       ],
       child: MyApp(),
     ),
@@ -28,7 +33,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

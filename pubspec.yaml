@@ -15,8 +15,10 @@ dependencies:
   google_maps_flutter: ^1.1.1
   google_polyline_algorithm: ^2.0.0
   flinq: ^1.1.1
+  vector_math: ^2.0.8
   location: ^3.0.0
   http: ^0.12.2
+  geodesy: ^0.3.2
   cupertino_icons: ^1.0.0
   flutter_bloc: ^6.1.1
   freezed_annotation: ^0.12.0

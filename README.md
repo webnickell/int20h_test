@@ -1,16 +1,7 @@
 # int20h_test
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## For install and test app 
+Open this link https://drive.google.com/drive/folders/107e_9axWK2ZvX9VXwr0n6djBnzTdggWG?usp=sharing
+and install app-release.apk
+then you'll see this project
+At the first you have to tap on location button and then tap anywhere on map. You'll see a route, and you can tap on the route. After that you can click on AR button, and it must show your route in AR. But it have some troubles with calculating this points.

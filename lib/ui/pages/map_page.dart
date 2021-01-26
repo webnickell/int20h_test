@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,10 @@ import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
 import 'package:int20h_test/bloc/points_bloc.dart/points_state.dart';
 import 'package:int20h_test/bloc/route_bloc/route_bloc.dart';
 import 'package:int20h_test/bloc/route_bloc/route_state.dart';
+import 'package:int20h_test/bloc/selected_route_bloc.dart/selected_route_cubit.dart';
+import 'package:int20h_test/bloc/selected_route_bloc.dart/selected_route_state.dart';
 import 'package:int20h_test/data/google_directions/google_directions.dart';
+import 'package:int20h_test/ui/pages/ar_page.dart';
 import 'package:location/location.dart';
 
 class MapPage extends StatefulWidget {
@@ -15,6 +19,11 @@ class MapPage extends StatefulWidget {
 
   @override
   _MapPageState createState() => _MapPageState();
+}
+
+Color getRandomColor() {
+  final r = Random();
+  return Color.fromRGBO(r.nextInt(256), r.nextInt(256), r.nextInt(256), 1);
 }
 
 class _MapPageState extends State<MapPage> {
@@ -82,40 +91,56 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: Text('Test task for INT20H'),
       ),
-      body: BlocBuilder<RouteBloc, RouteState>(
-        builder: (_, routeState) => BlocBuilder<PointsCubit, PointsState>(
-          builder: (_, points) => GoogleMap(
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            onTap: _onMapTap,
-            markers: points.destination != null
-                ? {
-                    Marker(
-                      markerId: MarkerId('destination'),
-                      position: LatLng(
-                        points.destination.latitude,
-                        points.destination.longitude,
+      body: Builder(
+        builder: (context) => BlocBuilder<RouteBloc, RouteState>(
+          builder: (_, routeState) => BlocBuilder<PointsCubit, PointsState>(
+            builder: (_, points) => GoogleMap(
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              onTap: _onMapTap,
+              markers: points.destination != null
+                  ? {
+                      Marker(
+                        markerId: MarkerId('destination'),
+                        position: LatLng(
+                          points.destination.latitude,
+                          points.destination.longitude,
+                        ),
                       ),
-                    ),
-                  }
-                : null,
-            polylines: routeState is RouteData
-                ? {
-                    for (final r in routeState.routes)
-                      Polyline(
-                        polylineId: PolylineId('path'),
-                        points: r.overviewPath
-                            .map((p) => LatLng(
-                                  p.latitude,
-                                  p.longitude,
-                                ))
-                            .toList(),
-                      ),
-                  }
-                : null,
-            myLocationEnabled: true,
+                    }
+                  : null,
+              polylines: routeState is RouteData
+                  ? {
+                      for (final r in routeState.routes)
+                        Polyline(
+                          consumeTapEvents: true,
+                          zIndex: 10,
+                          width: 20,
+                          color: getRandomColor(),
+                          polylineId: PolylineId('$r'),
+                          points: r.overviewPath
+                              .map((p) => LatLng(
+                                    p.latitude,
+                                    p.longitude,
+                                  ))
+                              .toList(),
+                          onTap: () {
+                            debugPrint('onTap');
+
+                            final snackBar =
+                                SnackBar(content: Text('Route is selected!'));
+
+                            Scaffold.of(context).showSnackBar(snackBar);
+
+                            context.read<SelectedRouteCubit>().setRoute(r);
+                          },
+                        ),
+                    }
+                  : null,
+              myLocationEnabled: true,
+            ),
           ),
         ),
       ),
@@ -125,13 +150,26 @@ class _MapPageState extends State<MapPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             FloatingActionButton(
+              heroTag: "btn1",
               onPressed: _onGetLocation,
               child: Icon(Icons.gps_fixed),
             ),
-            FloatingActionButton(
-              onPressed: () {},
-              child: Text('AR'),
-            ),
+            BlocBuilder<SelectedRouteCubit, SelectedRouteState>(
+                builder: (context, state) {
+              final disabled = state is SelectedRouteLoading;
+              return FloatingActionButton(
+                heroTag: "btn2",
+                onPressed: disabled
+                    ? null
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ArPage()),
+                        );
+                      },
+                child: Text('AR'),
+              );
+            }),
           ],
         ),
       ),
