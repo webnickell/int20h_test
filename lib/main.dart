@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
+import 'package:int20h_test/bloc/ar_bloc/ar_bloc.dart';
+import 'package:int20h_test/bloc/points_bloc/points_cubit.dart';
 import 'package:int20h_test/bloc/route_bloc/route_bloc.dart';
 import 'package:int20h_test/data/google_directions/google_directions.dart';
 import 'package:int20h_test/ui/pages/map_page.dart';
 import 'package:location/location.dart';
-
-import 'bloc/selected_route_bloc.dart/selected_route_cubit.dart';
-import 'ui/pages/ar_page.dart';
 
 void main() {
   DirectionsService.init('AIzaSyBHv9oUtC-pAi-tb1ftPLAal7VSDC9xHtI');
@@ -24,7 +22,7 @@ void main() {
           ),
         ),
         BlocProvider(
-          create: (ctx) => SelectedRouteCubit(),
+          create: (ctx) => ArBloc(),
         ),
       ],
       child: MyApp(),

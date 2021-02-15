@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
+import 'package:int20h_test/bloc/points_bloc/points_cubit.dart';
 import 'package:int20h_test/bloc/route_bloc/route_event.dart';
 import 'package:int20h_test/bloc/route_bloc/route_state.dart';
 import 'package:int20h_test/data/google_directions/google_directions.dart';

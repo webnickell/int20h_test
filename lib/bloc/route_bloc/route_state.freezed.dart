@@ -14,20 +14,20 @@ class _$RouteStateTearOff {
   const _$RouteStateTearOff();
 
 // ignore: unused_element
-  RouteData call({@required List<DirectionsRoute> routes}) {
-    return RouteData(
+  RouteStateData call({@required List<DirectionsRoute> routes}) {
+    return RouteStateData(
       routes: routes,
     );
   }
 
 // ignore: unused_element
-  RouteLoading loading() {
-    return const RouteLoading();
+  RouteStateLoading loading() {
+    return const RouteStateLoading();
   }
 
 // ignore: unused_element
-  RouteError error({@required String message}) {
-    return RouteError(
+  RouteStateError error({@required String message}) {
+    return RouteStateError(
       message: message,
     );
   }
@@ -54,15 +54,15 @@ mixin _$RouteState {
   });
   @optionalTypeArgs
   TResult map<TResult extends Object>(
-    TResult $default(RouteData value), {
-    @required TResult loading(RouteLoading value),
-    @required TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    @required TResult loading(RouteStateLoading value),
+    @required TResult error(RouteStateError value),
   });
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
-    TResult $default(RouteData value), {
-    TResult loading(RouteLoading value),
-    TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    TResult loading(RouteStateLoading value),
+    TResult error(RouteStateError value),
     @required TResult orElse(),
   });
 }
@@ -84,26 +84,28 @@ class _$RouteStateCopyWithImpl<$Res> implements $RouteStateCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $RouteDataCopyWith<$Res> {
-  factory $RouteDataCopyWith(RouteData value, $Res Function(RouteData) then) =
-      _$RouteDataCopyWithImpl<$Res>;
+abstract class $RouteStateDataCopyWith<$Res> {
+  factory $RouteStateDataCopyWith(
+          RouteStateData value, $Res Function(RouteStateData) then) =
+      _$RouteStateDataCopyWithImpl<$Res>;
   $Res call({List<DirectionsRoute> routes});
 }
 
 /// @nodoc
-class _$RouteDataCopyWithImpl<$Res> extends _$RouteStateCopyWithImpl<$Res>
-    implements $RouteDataCopyWith<$Res> {
-  _$RouteDataCopyWithImpl(RouteData _value, $Res Function(RouteData) _then)
-      : super(_value, (v) => _then(v as RouteData));
+class _$RouteStateDataCopyWithImpl<$Res> extends _$RouteStateCopyWithImpl<$Res>
+    implements $RouteStateDataCopyWith<$Res> {
+  _$RouteStateDataCopyWithImpl(
+      RouteStateData _value, $Res Function(RouteStateData) _then)
+      : super(_value, (v) => _then(v as RouteStateData));
 
   @override
-  RouteData get _value => super._value as RouteData;
+  RouteStateData get _value => super._value as RouteStateData;
 
   @override
   $Res call({
     Object routes = freezed,
   }) {
-    return _then(RouteData(
+    return _then(RouteStateData(
       routes:
           routes == freezed ? _value.routes : routes as List<DirectionsRoute>,
     ));
@@ -111,8 +113,8 @@ class _$RouteDataCopyWithImpl<$Res> extends _$RouteStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$RouteData implements RouteData {
-  const _$RouteData({@required this.routes}) : assert(routes != null);
+class _$RouteStateData implements RouteStateData {
+  const _$RouteStateData({@required this.routes}) : assert(routes != null);
 
   @override
   final List<DirectionsRoute> routes;
@@ -125,7 +127,7 @@ class _$RouteData implements RouteData {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is RouteData &&
+        (other is RouteStateData &&
             (identical(other.routes, routes) ||
                 const DeepCollectionEquality().equals(other.routes, routes)));
   }
@@ -136,8 +138,8 @@ class _$RouteData implements RouteData {
 
   @JsonKey(ignore: true)
   @override
-  $RouteDataCopyWith<RouteData> get copyWith =>
-      _$RouteDataCopyWithImpl<RouteData>(this, _$identity);
+  $RouteStateDataCopyWith<RouteStateData> get copyWith =>
+      _$RouteStateDataCopyWithImpl<RouteStateData>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -170,9 +172,9 @@ class _$RouteData implements RouteData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object>(
-    TResult $default(RouteData value), {
-    @required TResult loading(RouteLoading value),
-    @required TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    @required TResult loading(RouteStateLoading value),
+    @required TResult error(RouteStateError value),
   }) {
     assert($default != null);
     assert(loading != null);
@@ -183,9 +185,9 @@ class _$RouteData implements RouteData {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
-    TResult $default(RouteData value), {
-    TResult loading(RouteLoading value),
-    TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    TResult loading(RouteStateLoading value),
+    TResult error(RouteStateError value),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
@@ -196,36 +198,37 @@ class _$RouteData implements RouteData {
   }
 }
 
-abstract class RouteData implements RouteState {
-  const factory RouteData({@required List<DirectionsRoute> routes}) =
-      _$RouteData;
+abstract class RouteStateData implements RouteState {
+  const factory RouteStateData({@required List<DirectionsRoute> routes}) =
+      _$RouteStateData;
 
   List<DirectionsRoute> get routes;
   @JsonKey(ignore: true)
-  $RouteDataCopyWith<RouteData> get copyWith;
+  $RouteStateDataCopyWith<RouteStateData> get copyWith;
 }
 
 /// @nodoc
-abstract class $RouteLoadingCopyWith<$Res> {
-  factory $RouteLoadingCopyWith(
-          RouteLoading value, $Res Function(RouteLoading) then) =
-      _$RouteLoadingCopyWithImpl<$Res>;
+abstract class $RouteStateLoadingCopyWith<$Res> {
+  factory $RouteStateLoadingCopyWith(
+          RouteStateLoading value, $Res Function(RouteStateLoading) then) =
+      _$RouteStateLoadingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$RouteLoadingCopyWithImpl<$Res> extends _$RouteStateCopyWithImpl<$Res>
-    implements $RouteLoadingCopyWith<$Res> {
-  _$RouteLoadingCopyWithImpl(
-      RouteLoading _value, $Res Function(RouteLoading) _then)
-      : super(_value, (v) => _then(v as RouteLoading));
+class _$RouteStateLoadingCopyWithImpl<$Res>
+    extends _$RouteStateCopyWithImpl<$Res>
+    implements $RouteStateLoadingCopyWith<$Res> {
+  _$RouteStateLoadingCopyWithImpl(
+      RouteStateLoading _value, $Res Function(RouteStateLoading) _then)
+      : super(_value, (v) => _then(v as RouteStateLoading));
 
   @override
-  RouteLoading get _value => super._value as RouteLoading;
+  RouteStateLoading get _value => super._value as RouteStateLoading;
 }
 
 /// @nodoc
-class _$RouteLoading implements RouteLoading {
-  const _$RouteLoading();
+class _$RouteStateLoading implements RouteStateLoading {
+  const _$RouteStateLoading();
 
   @override
   String toString() {
@@ -234,7 +237,7 @@ class _$RouteLoading implements RouteLoading {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is RouteLoading);
+    return identical(this, other) || (other is RouteStateLoading);
   }
 
   @override
@@ -271,9 +274,9 @@ class _$RouteLoading implements RouteLoading {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object>(
-    TResult $default(RouteData value), {
-    @required TResult loading(RouteLoading value),
-    @required TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    @required TResult loading(RouteStateLoading value),
+    @required TResult error(RouteStateError value),
   }) {
     assert($default != null);
     assert(loading != null);
@@ -284,9 +287,9 @@ class _$RouteLoading implements RouteLoading {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
-    TResult $default(RouteData value), {
-    TResult loading(RouteLoading value),
-    TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    TResult loading(RouteStateLoading value),
+    TResult error(RouteStateError value),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
@@ -297,40 +300,41 @@ class _$RouteLoading implements RouteLoading {
   }
 }
 
-abstract class RouteLoading implements RouteState {
-  const factory RouteLoading() = _$RouteLoading;
+abstract class RouteStateLoading implements RouteState {
+  const factory RouteStateLoading() = _$RouteStateLoading;
 }
 
 /// @nodoc
-abstract class $RouteErrorCopyWith<$Res> {
-  factory $RouteErrorCopyWith(
-          RouteError value, $Res Function(RouteError) then) =
-      _$RouteErrorCopyWithImpl<$Res>;
+abstract class $RouteStateErrorCopyWith<$Res> {
+  factory $RouteStateErrorCopyWith(
+          RouteStateError value, $Res Function(RouteStateError) then) =
+      _$RouteStateErrorCopyWithImpl<$Res>;
   $Res call({String message});
 }
 
 /// @nodoc
-class _$RouteErrorCopyWithImpl<$Res> extends _$RouteStateCopyWithImpl<$Res>
-    implements $RouteErrorCopyWith<$Res> {
-  _$RouteErrorCopyWithImpl(RouteError _value, $Res Function(RouteError) _then)
-      : super(_value, (v) => _then(v as RouteError));
+class _$RouteStateErrorCopyWithImpl<$Res> extends _$RouteStateCopyWithImpl<$Res>
+    implements $RouteStateErrorCopyWith<$Res> {
+  _$RouteStateErrorCopyWithImpl(
+      RouteStateError _value, $Res Function(RouteStateError) _then)
+      : super(_value, (v) => _then(v as RouteStateError));
 
   @override
-  RouteError get _value => super._value as RouteError;
+  RouteStateError get _value => super._value as RouteStateError;
 
   @override
   $Res call({
     Object message = freezed,
   }) {
-    return _then(RouteError(
+    return _then(RouteStateError(
       message: message == freezed ? _value.message : message as String,
     ));
   }
 }
 
 /// @nodoc
-class _$RouteError implements RouteError {
-  const _$RouteError({@required this.message}) : assert(message != null);
+class _$RouteStateError implements RouteStateError {
+  const _$RouteStateError({@required this.message}) : assert(message != null);
 
   @override
   final String message;
@@ -343,7 +347,7 @@ class _$RouteError implements RouteError {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is RouteError &&
+        (other is RouteStateError &&
             (identical(other.message, message) ||
                 const DeepCollectionEquality().equals(other.message, message)));
   }
@@ -354,8 +358,8 @@ class _$RouteError implements RouteError {
 
   @JsonKey(ignore: true)
   @override
-  $RouteErrorCopyWith<RouteError> get copyWith =>
-      _$RouteErrorCopyWithImpl<RouteError>(this, _$identity);
+  $RouteStateErrorCopyWith<RouteStateError> get copyWith =>
+      _$RouteStateErrorCopyWithImpl<RouteStateError>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -388,9 +392,9 @@ class _$RouteError implements RouteError {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object>(
-    TResult $default(RouteData value), {
-    @required TResult loading(RouteLoading value),
-    @required TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    @required TResult loading(RouteStateLoading value),
+    @required TResult error(RouteStateError value),
   }) {
     assert($default != null);
     assert(loading != null);
@@ -401,9 +405,9 @@ class _$RouteError implements RouteError {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
-    TResult $default(RouteData value), {
-    TResult loading(RouteLoading value),
-    TResult error(RouteError value),
+    TResult $default(RouteStateData value), {
+    TResult loading(RouteStateLoading value),
+    TResult error(RouteStateError value),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
@@ -414,10 +418,10 @@ class _$RouteError implements RouteError {
   }
 }
 
-abstract class RouteError implements RouteState {
-  const factory RouteError({@required String message}) = _$RouteError;
+abstract class RouteStateError implements RouteState {
+  const factory RouteStateError({@required String message}) = _$RouteStateError;
 
   String get message;
   @JsonKey(ignore: true)
-  $RouteErrorCopyWith<RouteError> get copyWith;
+  $RouteStateErrorCopyWith<RouteStateError> get copyWith;
 }

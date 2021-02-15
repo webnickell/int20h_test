@@ -4,12 +4,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:int20h_test/bloc/points_bloc.dart/points_cubit.dart';
-import 'package:int20h_test/bloc/points_bloc.dart/points_state.dart';
+import 'package:int20h_test/bloc/ar_bloc/ar_bloc.dart';
+import 'package:int20h_test/bloc/ar_bloc/ar_event.dart';
+import 'package:int20h_test/bloc/ar_bloc/ar_state.dart';
+import 'package:int20h_test/bloc/points_bloc/points_cubit.dart';
+import 'package:int20h_test/bloc/points_bloc/points_state.dart';
 import 'package:int20h_test/bloc/route_bloc/route_bloc.dart';
 import 'package:int20h_test/bloc/route_bloc/route_state.dart';
-import 'package:int20h_test/bloc/selected_route_bloc.dart/selected_route_cubit.dart';
-import 'package:int20h_test/bloc/selected_route_bloc.dart/selected_route_state.dart';
 import 'package:int20h_test/data/google_directions/google_directions.dart';
 import 'package:int20h_test/ui/pages/ar_page.dart';
 import 'package:location/location.dart';
@@ -111,35 +112,11 @@ class _MapPageState extends State<MapPage> {
                       ),
                     }
                   : null,
-              polylines: routeState is RouteData
-                  ? {
-                      for (final r in routeState.routes)
-                        Polyline(
-                          consumeTapEvents: true,
-                          zIndex: 10,
-                          width: 20,
-                          color: getRandomColor(),
-                          polylineId: PolylineId('$r'),
-                          points: r.overviewPath
-                              .map((p) => LatLng(
-                                    p.latitude,
-                                    p.longitude,
-                                  ))
-                              .toList(),
-                          onTap: () {
-                            debugPrint('onTap');
-
-                            final snackBar =
-                                SnackBar(content: Text('Route is selected!'));
-
-                            Scaffold.of(context).showSnackBar(snackBar);
-
-                            context.read<SelectedRouteCubit>().setRoute(r);
-                          },
-                        ),
-                    }
+              polylines: routeState is RouteStateData
+                  ? polylines(context, routeState)
                   : null,
               myLocationEnabled: true,
+              myLocationButtonEnabled: true,
             ),
           ),
         ),
@@ -154,25 +131,51 @@ class _MapPageState extends State<MapPage> {
               onPressed: _onGetLocation,
               child: Icon(Icons.gps_fixed),
             ),
-            BlocBuilder<SelectedRouteCubit, SelectedRouteState>(
-                builder: (context, state) {
-              final disabled = state is SelectedRouteLoading;
-              return FloatingActionButton(
-                heroTag: "btn2",
-                onPressed: disabled
-                    ? null
-                    : () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ArPage()),
-                        );
-                      },
-                child: Text('AR'),
-              );
-            }),
+            FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () {
+                final arBloc = context.read<ArBloc>();
+                final disabled = arBloc.state is ArStateLoading;
+                if (disabled) {
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ArPage()),
+                );
+              },
+              child: Text('AR'),
+            )
           ],
         ),
       ),
     );
+  }
+
+  Set<Polyline> polylines(BuildContext context, RouteStateData routeState) {
+    return routeState.routes
+        .map(
+          (r) => Polyline(
+            consumeTapEvents: true,
+            zIndex: 10,
+            width: 20,
+            color: getRandomColor(),
+            polylineId: PolylineId('$r'),
+            points: r.overviewPath
+                .map((p) => LatLng(
+                      p.latitude,
+                      p.longitude,
+                    ))
+                .toList(),
+            onTap: () {
+              final snackBar = SnackBar(content: Text('Route is selected!'));
+
+              Scaffold.of(context).showSnackBar(snackBar);
+
+              context.read<ArBloc>().add(ArEvent.setRoute(route: r));
+            },
+          ),
+        )
+        .toSet();
   }
 }

@@ -7,11 +7,11 @@ part 'route_state.freezed.dart';
 abstract class RouteState with _$RouteState {
   const factory RouteState({
     @required List<DirectionsRoute> routes,
-  }) = RouteData;
+  }) = RouteStateData;
 
-  const factory RouteState.loading() = RouteLoading;
+  const factory RouteState.loading() = RouteStateLoading;
 
   const factory RouteState.error({
     @required String message,
-  }) = RouteError;
+  }) = RouteStateError;
 }
